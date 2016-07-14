@@ -14,7 +14,6 @@ struct multiboot_t {
     uint32_t mods_count;       //boot 模块列表
     uint32_t mods_addr;
 
-    // 内核映像相关信息
     uint32_t num;              //ELF 格式内核映像的 section 头表
     uint32_t size;
     uint32_t addr;
@@ -34,7 +33,7 @@ struct multiboot_t {
     uint32_t vbe_interface_seg;
     uint32_t vbe_interface_off;
     uint32_t vbe_interface_len;
-} __attribute__((packed)) multiboot_t;//不对齐结构体
+} __attribute__((packed)) multiboot_t;
 
 typedef
 struct mmap_entry_t {
@@ -46,7 +45,7 @@ struct mmap_entry_t {
     uint32_t type;
 } __attribute__((packed)) mmap_entry_t;
 
-// boot.s 中的全局变量
+// boot.s 中定义的 multiboot_t 指针
 extern multiboot_t *glb_mboot_ptr;
 
 #endif

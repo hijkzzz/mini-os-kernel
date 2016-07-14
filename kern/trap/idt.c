@@ -1,27 +1,28 @@
 #include "idt.h"
 #include "string.h"
 #include "debug.h"
+#include "common.h"
 
 idt_entry_t idt_entries[256];
 
-//IDTR
+// IDTR
 idt_ptr_t idt_ptr;
 
-//中断处理函数数组
+// 中断处理函数数组
 interrupt_handler_t interrupt_handlers[256];
 
 static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
 
-//定义在 idt_s.s 中的 idt 加载函数
+// 定义在 idt_s.s 中的 idt 加载函数
 extern void idt_flush(uint32_t);
 
 void init_idt()
 {
-    //清零
+    // 清零
     bzero((uint8_t *)&interrupt_handlers, sizeof(interrupt_handlers));
     bzero((uint8_t *)&idt_entries, sizeof(idt_entries));
 
-    //填中断描述符表
+    // 填写中断描述符表
     // 0-32:  用于 CPU 的中断处理
     // 0x08 内核代码段选择子， 0x8E P = 1， DPL = 00
     idt_set_gate( 0, (uint32_t)isr0,  0x08, 0x8E);

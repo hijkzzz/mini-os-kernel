@@ -1,4 +1,4 @@
-//printk 来自 Linux 内核源码
+// printk 可以在 Linux 内核源码中找到
 #include "string.h"
 #include "debug.h"
 

@@ -2,16 +2,17 @@
 #include "string.h"
 #include "elf.h"
 
-// 从 multiboot_t 结构获取ELF信息
+// 从 multiboot_t 结构获取 ELF 信息
 elf_t elf_from_multiboot(multiboot_t *mb)
 {
     elf_t elf;
     elf_section_header_t *sh = (elf_section_header_t*)mb->addr;
+    // 段字符串表地址
+    uint32_t shstrtab = sh[mb->shndx].addr;
 
-    uint32_t shstrtab = sh[mb->shndx].addr;//段字符串表地址
     // 搜索字符串表，符号表
     for (int i = 0; i < mb->num; i++) {
-        //sh[i].name 是一个偏移值
+        // sh[i].name 是一个偏移值
         const char *name = (const char *)(shstrtab + sh[i].name);
         if (strcmp(name, ".strtab") == 0) {
             elf.strtab = (const char *)sh[i].addr;
@@ -26,11 +27,11 @@ elf_t elf_from_multiboot(multiboot_t *mb)
     return elf;
 }
 
-// 查看ELF的符号信息
+// 查看 ELF 的符号信息
 const char *elf_lookup_symbol(uint32_t addr, elf_t *elf)
 {
     for (int i = 0; i < (elf->symtabsz / sizeof(elf_symbol_t)); i++) {
-        //判断是否为函数符号
+        // 判断是否为函数符号
         if (ELF32_ST_TYPE(elf->symtab[i].info) != 0x2) {
               continue;
         }

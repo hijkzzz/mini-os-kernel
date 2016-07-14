@@ -32,7 +32,7 @@ struct elf_symbol_t {
   uint16_t shndx;
 } __attribute__((packed)) elf_symbol_t;
 
-// ELF 信息，符号表和字符串表
+// ELF 信息，即符号表和字符串表
 typedef
 struct elf_t {
   elf_symbol_t *symtab;
@@ -41,10 +41,10 @@ struct elf_t {
   uint32_t      strtabsz;
 } elf_t;
 
-// 从 multiboot_t 结构获取ELF信息
+// 从 multiboot_t 结构获取 ELF 信息
 elf_t elf_from_multiboot(multiboot_t *mb);
 
-// 查看ELF的符号信息
+// 查看 ELF 的符号信息
 const char *elf_lookup_symbol(uint32_t addr, elf_t *elf);
 
 #endif
