@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "gdt.h"
 #include "idt.h"
+#include "timer.h"
 
 int kern_entry()
 {
@@ -13,8 +14,12 @@ int kern_entry()
     console_clear();
     console_write_color("Hello World!\n", rc_black, rc_white);
 
-    // 测试中断处理
-    asm volatile ("int $0x3");
+    //启动时钟中断，频率 5
+    init_timer(5);
+
+    //开中断
+    asm volatile ("sti");
+
 	return 0;
 }
 

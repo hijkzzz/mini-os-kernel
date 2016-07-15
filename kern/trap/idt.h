@@ -8,7 +8,7 @@ void init_idt();
 typedef
 struct idt_entry_t {
     uint16_t base_low;
-    uint16_t sel;    //目标代码的段选择子
+    uint16_t sel;    // 目标代码的段选择子
     uint8_t always0;
     uint8_t flags;
     uint16_t base_high;
@@ -41,17 +41,17 @@ struct pt_regs_t {
 } pt_regs_t;
 
 
-//中断处理函数指针
+// 中断处理函数指针
 typedef void (*interrupt_handler_t)(pt_regs_t *);
 
-//注册中断处理函数
+// 注册中断处理函数
 void register_interrupt_handler(uint8_t n, interrupt_handler_t h);
 
-//调用中断处理
+// 调用中断处理
 void isr_handler(pt_regs_t *regs);
 
-//声明中断处理函数 0-19 属于 CPU 的异常中断
-//函数定义在 idt_s.s 文件中
+// 声明中断处理函数
+// 0-19 属于 CPU 的异常中断
 void isr0();         // 0 #DE 除 0 异常
 void isr1();         // 1 #DB 调试异常
 void isr2();         // 2 NMI
@@ -88,6 +88,22 @@ void isr30();
 void isr31();
 
 // 32～255 用户自定义异常
-void isr255();
+void isr32();        // 0 电脑系统计时器
+void isr33();        // 1 键盘
+void isr34();        // 2 与 IRQ9 相接，MPU-401 MD 使用
+void isr35();        // 3 串口设备
+void isr36();        // 4 串口设备
+void isr37();        // 5 建议声卡使用
+void isr38();        // 6 软驱传输控制使用
+void isr39();        // 7 打印机传输控制使用
+void isr40();        // 8 即时时钟
+void isr41();        // 9 与 IRQ2 相接，可设定给其他硬件
+void isr42();        // 10 建议网卡使用
+void isr43();        // 11 建议 AGP 显卡使用
+void isr44();        // 12 接 PS/2 鼠标，也可设定给其他硬件
+void isr45();        // 13 协处理器使用
+void isr46();        // 14 IDE0 传输控制使用
+void isr47();        // 15 IDE1 传输控制使用
 
+void isr255();       // 系统调用
 #endif

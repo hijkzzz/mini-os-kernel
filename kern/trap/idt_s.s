@@ -52,17 +52,36 @@ ISR_NOERRCODE 28
 ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
-; 32～255 用户自定义
+
+; 32～255 用户自定义，硬件中断
+ISR_NOERRCODE 32     ; 0 电脑系统计时器
+ISR_NOERRCODE 33     ; 1 键盘
+ISR_NOERRCODE 34     ; 2 与 IRQ9 相接，MPU-401 MD 使用
+ISR_NOERRCODE 35     ; 3 串口设备
+ISR_NOERRCODE 36     ; 4 串口设备
+ISR_NOERRCODE 37     ; 5 建议声卡使用
+ISR_NOERRCODE 38     ; 6 软驱传输控制使用
+ISR_NOERRCODE 39     ; 7 打印机传输控制使用
+ISR_NOERRCODE 40     ; 8 即时时钟
+ISR_NOERRCODE 41     ; 9 与 IRQ2 相接，可设定给其他硬件
+ISR_NOERRCODE 42     ; 10 建议网卡使用
+ISR_NOERRCODE 43     ; 11 建议 AGP 显卡使用
+ISR_NOERRCODE 44     ; 12 接 PS/2 鼠标，也可设定给其他硬件
+ISR_NOERRCODE 45     ; 13 协处理器使用
+ISR_NOERRCODE 46     ; 14 IDE0 传输控制使用
+ISR_NOERRCODE 47     ; 15 IDE1 传输控制使用
+
+; 系统调用
 ISR_NOERRCODE 255
 
 [EXTERN isr_handler]
 [GLOBAL isr_common_stub]
 isr_common_stub:
-    pusha               ; 压入通用寄存器
+    pusha               ; 保存通用寄存器
     mov ax, ds
-    push eax            ; 压入数据段选择子
+    push eax            ; 保存数据段选择子
 
-    mov ax, 0x10        ; 切换内核数据段
+    mov ax, 0x10        ; 加载内核数据段选择子
     mov ds, ax
     mov es, ax
     mov fs, ax
@@ -71,23 +90,23 @@ isr_common_stub:
 
     push esp            ; 传入 pt_regs 结构体
     call isr_handler    ; 调用中断服务例程
-    add esp, 4          ; 释放参数
+    add esp, 4          ; 清除传入参数
 
-    pop ebx             ; 恢复用户数据段
+    pop ebx             ; 恢复原来的数据段选择子
     mov ds, bx
     mov es, bx
     mov fs, bx
     mov gs, bx
     mov ss, bx
 
-    popa                ; 弹出通用寄存器
-    add esp, 8          ; 弹出中断号, Error Code
-    iret                ; 弹出 EIP EFLAGS ESP SS
+    popa                ; 通用寄存器 出栈
+    add esp, 8          ; 中断号, Error Code 出栈
+    iret                ; EIP，CS，EFLAGS，ESP，SS 出栈
 .end
 
 [GLOBAL idt_flush]
 idt_flush:
     mov eax, [esp + 4]
     lidt [eax]
-    ret                 ;弹出 EIP
+    ret                 ; EIP 出栈
 .end
