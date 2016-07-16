@@ -1,4 +1,4 @@
 file mini_kernel
 target remote:1234
-break kern_entry
-conintue
+break init_pmm
+continue
