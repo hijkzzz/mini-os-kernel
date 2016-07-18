@@ -51,7 +51,7 @@ __attribute__((section(".init.text"))) void kern_entry()
             "xor %%ebp, %%ebp" : : "r" (kern_stack_top));
 
     // 更新全局 multiboot_t 指针
-    glb_mboot_ptr = tmp_mboot_ptr + PAGE_OFFSET;
+    glb_mboot_ptr = (multiboot_t *)((uint32_t)tmp_mboot_ptr + PAGE_OFFSET);
 
     // 内核初始化
     kern_init();
@@ -62,30 +62,33 @@ void kern_init()
 {
     // 初始化字符显示
     init_debug();
+    // 初始化全局描述符表
+    init_gdt();
+    // 初始化中断描述符表、可编程中断控制器
+    init_idt();
+    // 初始化时钟中断
+    init_timer(10);
+    // 初始化物理内存管理
+    init_pmm();
+    // 初始化页表
+    init_vmm();
 
     // 测试字符显示
     console_clear();
     console_write_color("Hello World!\n", rc_black, rc_white);
 
-    // 初始化全局描述符表，中断描述符表，可编程中断控制器
-    init_gdt();
-    init_idt();
-
-    // 初始化时钟
-    init_timer(3);
-
-    // 显示内核加载地址
-    printk("kernel in memory start: 0x%08X\n", kern_start);
+    // 显示内核虚拟地址
+    printk("\nkernel in memory start: 0x%08X\n", kern_start);
     printk("kernel in memory end:   0x%08X\n", kern_end);
-    printk("kernel in memory used:   %d KB\n\n", (kern_end - kern_start) / 1024);
-    show_memory_map();
+    printk("kernel in memory used:   %d KB\n", (kern_end - kern_start) / 1024);
 
-    // 初始化内存管理
-    init_pmm();
+    // 显示可用内存
+    show_memory_map();
+    printk_color(rc_black, rc_red, "\nThe Count of Physical Memory Page is: %u\n\n", phy_page_count);
 
     // 测试内存管理
     uint32_t allc_addr = NULL;
-    printk_color(rc_black, rc_light_brown, "Test Physical Memory Alloc :\n");
+    printk_color(rc_black, rc_light_brown, "\nTest Physical Memory Alloc :\n");
     allc_addr = pmm_alloc_page();
     printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
     allc_addr = pmm_alloc_page();
@@ -94,9 +97,6 @@ void kern_init()
     printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
     allc_addr = pmm_alloc_page();
     printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n\n", allc_addr);
-
-    // 初始化页表
-    init_vmm();
 
     while (1) {
         asm volatile ("hlt");

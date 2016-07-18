@@ -3,7 +3,8 @@
 #include "vmm.h"
 
 // 显存地址，加上内核偏移地址
-static uint16_t *video_memory = (uint16_t *)0xB8000 + PAGE_OFFSET;
+// BUG小记，地址要先相加，再转换成指针
+static uint16_t *video_memory = (uint16_t *)(0xB8000 + PAGE_OFFSET);
 
 // 光标位置
 static uint8_t cursor_x = 0;
