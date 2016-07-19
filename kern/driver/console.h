@@ -35,7 +35,4 @@ void console_write(char *cstr);
 // 输出带颜色的字符串
 void console_write_color(char *cstr, real_color_t back, real_color_t fore);
 
-// 输出十六进制
-void console_write_hex(uint32_t n, real_color_t back, real_color_t fore);
-
 #endif

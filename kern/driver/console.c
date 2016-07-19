@@ -102,27 +102,3 @@ void console_write_color(char *cstr, real_color_t back, real_color_t fore)
         console_putc_color(*cstr++, back, fore);
     }
 }
-
-void console_write_hex(uint32_t n, real_color_t back, real_color_t fore)
-{
-    int tmp;
-    char start = 0;
-
-    console_write_color("0x", back, fore);
-
-    // 逐次取出四位
-    for (int i = 28; i >= 0; i -= 4) {
-        tmp = (n >> i) & 0xF;
-        if (tmp == 0 && start == 0) {
-              continue;
-        }
-        // 已经开始输出
-        start = 1;
-        if (tmp >= 0xA) {
-              console_putc_color(tmp-0xA+'a', back, fore);
-        } else {
-              console_putc_color(tmp+'0', back, fore);
-        }
-    }
-}
-
