@@ -1,5 +1,5 @@
-#ifndef INCLUDE_STRING_H_
-#define INCLUDE_STRING_H_
+#ifndef INCLUDE_STRING_H
+#define INCLUDE_STRING_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ char *strcat(char *dest, const char *src);
 
 int strlen(const char *src);
 
-#endif
+#endif // INCLUDE_STRING_H

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_PMM_H_
-#define INCLUDE_PMM_H_
+#ifndef INCLUDE_PMM_H
+#define INCLUDE_PMM_H
 
 #include "multiboot.h"
 
@@ -29,4 +29,4 @@ void pmm_free_page(uint32_t p);
 // 内存分布状态
 void show_memory_map();
 
-#endif // INCLUDE_PMM_H_
+#endif // INCLUDE_PMM_H

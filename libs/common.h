@@ -1,5 +1,5 @@
-#ifndef INCLUDE_COMMON_H_
-#define INCLUDE_COMMON_H_
+#ifndef INCLUDE_COMMON_H
+#define INCLUDE_COMMON_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ uint8_t inb(uint16_t port);
 // 输入字
 uint16_t inw(uint16_t port);
 
-#endif
+#endif // INCLUDE_COMMON_H

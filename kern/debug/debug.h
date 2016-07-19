@@ -1,5 +1,5 @@
-#ifndef INCLUDE_DEBUG_H_
-#define INCLUDE_DEBUG_H_
+#ifndef INCLUDE_DEBUG_H
+#define INCLUDE_DEBUG_H
 
 #include "console.h"
 #include "vargs.h"
@@ -31,4 +31,4 @@ void printk(const char *format, ...);
 // 内核的打印函数 带颜色
 void printk_color(real_color_t back, real_color_t fore, const char *format, ...);
 
-#endif
+#endif //INCLUDE_DEBUG_H

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_VMM_H_
-#define INCLUDE_VMM_H_
+#ifndef INCLUDE_VMM_H
+#define INCLUDE_VMM_H
 
 #include "types.h"
 #include "idt.h"
@@ -55,4 +55,4 @@ uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa);
 // 缺页异常处理
 void page_fault(pt_regs_t *regs);
 
-#endif  // INCLUDE_VMM_H_
+#endif  // INCLUDE_VMM_H

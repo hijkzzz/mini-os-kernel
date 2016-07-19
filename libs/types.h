@@ -1,5 +1,5 @@
-#ifndef INCLUDE_TYPES_H_
-#define INCLUDE_TYPES_H_
+#ifndef INCLUDE_TYPES_H
+#define INCLUDE_TYPES_H
 
 #ifndef NULL
     #define NULL 0
@@ -29,4 +29,4 @@ typedef uint32_t       size_t;
             (typeof(a))(ROUNDDOWN((size_t)(a) + __n - 1, __n));     \
         })
 
-#endif
+#endif // INCLUDE_TYPES_H

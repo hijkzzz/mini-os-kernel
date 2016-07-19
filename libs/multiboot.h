@@ -1,5 +1,5 @@
-#ifndef INCLUDE_MULTIBOOT_H_
-#define INCLUDE_MULTIBOOT_H_
+#ifndef INCLUDE_MULTIBOOT_H
+#define INCLUDE_MULTIBOOT_H
 
 #include "types.h"
 
@@ -51,4 +51,4 @@ extern multiboot_t *tmp_mboot_ptr;
 // 建立页表后的 multiboot 结构体指针
 extern multiboot_t *glb_mboot_ptr;
 
-#endif
+#endif // INCLUDE_MULTIBOOT_H

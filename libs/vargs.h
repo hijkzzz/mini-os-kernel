@@ -1,5 +1,5 @@
-#ifndef INCLUDE_VARGS_H_
-#define INCLUDE_VARGS_H_
+#ifndef INCLUDE_VARGS_H
+#define INCLUDE_VARGS_H
 
 typedef __builtin_va_list va_list;
 
@@ -7,4 +7,4 @@ typedef __builtin_va_list va_list;
 #define va_arg(ap, type)      (__builtin_va_arg(ap, type))
 #define va_end(ap)
 
-#endif
+#endif // INCLUDE_VARGS_H

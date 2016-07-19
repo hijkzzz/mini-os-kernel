@@ -10,7 +10,7 @@ uint32_t phy_page_count;
 
 void init_pmm()
 {
-    // GRUB 提供的内存信息
+    // GRUB 提供的内存分布信息
     uint32_t mmap_addr = glb_mboot_ptr->mmap_addr;
     uint32_t mmap_length = glb_mboot_ptr->mmap_length;
 

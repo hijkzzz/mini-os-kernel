@@ -1,5 +1,5 @@
-#ifndef INCLUDE_GDT_H_
-#define INCLUDE_GDT_H_
+#ifndef INCLUDE_GDT_H
+#define INCLUDE_GDT_H
 
 #include "types.h"
 
@@ -25,4 +25,4 @@ void init_gdt();
 
 extern void gdt_flush(uint32_t);
 
-#endif
+#endif // INCLUDE_GDT_H

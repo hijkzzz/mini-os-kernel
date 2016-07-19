@@ -1,5 +1,5 @@
-#ifndef INCLUDE_ELF_H_
-#define INCLUDE_ELF_H_
+#ifndef INCLUDE_ELF_H
+#define INCLUDE_ELF_H
 
 #include "types.h"
 #include "multiboot.h"
@@ -47,4 +47,4 @@ elf_t elf_from_multiboot(multiboot_t *mb);
 // 查看 ELF 的符号信息
 const char *elf_lookup_symbol(uint32_t addr, elf_t *elf);
 
-#endif
+#endif // INCLUDE_ELF_H

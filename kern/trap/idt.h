@@ -1,5 +1,5 @@
-#ifndef INCLUDE_IDT_H_
-#define INCLUDE_IDT_H_
+#ifndef INCLUDE_IDT_H
+#define INCLUDE_IDT_H
 
 #include "types.h"
 
@@ -106,4 +106,5 @@ void isr46();        // 14 IDE0 传输控制使用
 void isr47();        // 15 IDE1 传输控制使用
 
 void isr255();       // 系统调用
-#endif
+
+#endif // INCLUDE_IDT_H

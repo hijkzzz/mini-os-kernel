@@ -1,5 +1,5 @@
-#ifndef INCLUDE_CONSOLE_H_
-#define INCLUDE_CONSOLE_H_
+#ifndef INCLUDE_CONSOLE_H
+#define INCLUDE_CONSOLE_H
 
 #include "types.h"
 // 颜色定义
@@ -35,4 +35,4 @@ void console_write(char *cstr);
 // 输出带颜色的字符串
 void console_write_color(char *cstr, real_color_t back, real_color_t fore);
 
-#endif
+#endif // INCLUDE_CONSOLE_H

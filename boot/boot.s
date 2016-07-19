@@ -35,7 +35,7 @@ start:
 ; 开启分页前的临时数据段
 section .init.data
 stack:
-    times 1024 db 0             ; 临时内核栈 1024B
+    times 1024 db 0             ; 临时内核栈大小 1024B
 STACK_TOP equ $ - stack - 1     ; 临时内核栈栈顶
 
 tmp_mboot_ptr:

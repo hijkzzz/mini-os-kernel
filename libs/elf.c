@@ -3,7 +3,7 @@
 #include "elf.h"
 #include "vmm.h"
 
-// 从 multiboot_t 结构获取 ELF 信息
+// 从 multiboot_t 结构获取 ELF 符号
 elf_t elf_from_multiboot(multiboot_t *mb)
 {
     elf_t elf;
