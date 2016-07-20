@@ -14,7 +14,7 @@ void init_pmm()
     uint32_t mmap_addr = glb_mboot_ptr->mmap_addr;
     uint32_t mmap_length = glb_mboot_ptr->mmap_length;
 
-    uint32_t phy_kern_end = kern_end - PAGE_OFFSET;
+    uint32_t phy_kern_end = (uint32_t)kern_end - PAGE_OFFSET;
     for (mmap_entry_t *mmap = (mmap_entry_t *)mmap_addr;
             (uint32_t)mmap < mmap_addr + mmap_length; ++mmap) {
         // 如果是有效物理内存
