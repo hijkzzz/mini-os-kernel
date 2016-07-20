@@ -1,5 +1,7 @@
 #include "vmm.h"
 #include "debug.h"
+#include "pmm.h"
+#include "string.h"
 
 // 内核页目录区域，对齐到 4KB
 pgd_t pgd_kern[PGD_SIZE] __attribute__ ((aligned(PAGE_SIZE)));
@@ -80,11 +82,74 @@ void page_fault(pt_regs_t *regs)
     while (1);
 }
 
-// 映射虚拟地址到物理地址，flags 为页权限
-void map(pgd_t *pgd_now, uint32_t va, uint32_t pa, uint32_t flags);
+// 映射虚拟地址到物理地址，flags 为页帧权限
+void map(pgd_t *pgd_now, uint32_t va, uint32_t pa, uint32_t flags)
+{
+    uint32_t pgd_idx = PGD_INDEX(va);
+    uint32_t pte_idx = PTE_INDEX(va);
+
+    // 从页目录获取页表
+    pte_t *pte = (pte_t *)(ROUNDDOWN(pgd_now[pgd_idx], PAGE_SIZE));
+    if (!pte) {
+        // 分配新页表
+        pte = (pte_t *)pmm_alloc_page();
+        pgd_now[pgd_idx] = (uint32_t)pte | PAGE_PRESENT | PAGE_WRITE;
+
+        // 页表清空
+        pte = (pte_t *)((uint32_t)pte + PAGE_OFFSET);
+        bzero(pte, PAGE_SIZE);
+    } else {
+        // 加上内核偏移地址
+        pte = (pte_t *)((uint32_t)pte + PAGE_OFFSET);
+    }
+
+    // 填写页表项
+    pte[pte_idx] = (ROUNDDOWN(pa, PAGE_SIZE) | flags);
+    // 更新快表
+    asm volatile ("invlpg (%0)" : : "a"(va));
+}
 
 // 取消映射
-void unmap(pgd_t *pgd_now, uint32_t va);
+void unmap(pgd_t *pgd_now, uint32_t va)
+{
+    uint32_t pgd_idx = PGD_INDEX(va);
+    uint32_t pte_idx = PTE_INDEX(va);
 
-uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa);
+    // 从页目录获取页表
+    pte_t *pte = (pte_t *)(ROUNDDOWN(pgd_now[pgd_idx], PAGE_SIZE));
+    if (!pte) {
+        return;
+    }
+
+    // 加上内核偏移地址
+    pte = (pte_t *)((uint32_t)pte + PAGE_OFFSET);
+
+    // 清空页表项
+    pte[pte_idx] = 0;
+    // 更新快表
+    asm volatile ("invlpg (%0)" : : "a"(va));
+}
+
+// 获取虚拟地址对应的物理地址，失败返回 0
+uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa)
+{
+    uint32_t pgd_idx = PGD_INDEX(va);
+    uint32_t pte_idx = PTE_INDEX(va);
+
+    // 从页目录获取页表
+    pte_t *pte = (pte_t *)(ROUNDDOWN(pgd_now[pgd_idx], PAGE_SIZE));
+    if (!pte) {
+        return 0;
+    }
+
+    // 加上内核偏移地址
+    pte = (pte_t *)((uint32_t)pte + PAGE_OFFSET);
+
+    if (pte[pte_idx] != 0 && pa) {
+        *pa = ROUNDDOWN(pte[pte_idx], PAGE_SIZE);
+        return 1;
+    }
+
+    return 0;
+}
 
