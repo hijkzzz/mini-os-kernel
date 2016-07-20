@@ -84,7 +84,7 @@ void kern_init()
 
     // 显示可用内存
     show_memory_map();
-    printk_color(rc_black, rc_red, "\nThe Count of Physical Memory Page is: %u\n\n", phy_page_count);
+    printk_color(rc_black, rc_red, "\nFree Physical Memory: %u MB\n", phy_page_count * 4 / 1024);
 
     // 测试内存管理
     uint32_t allc_addr = NULL;
