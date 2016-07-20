@@ -6,3 +6,6 @@ mini_kernel
 
 # 忽略 tags
 tags
+
+# 忽略软盘镜像
+floppy.img
