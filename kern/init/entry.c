@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "pmm.h"
 #include "vmm.h"
+#include "heap.h"
 
 // 内核初始化
 void kern_init();
@@ -72,10 +73,8 @@ void kern_init()
     init_pmm();
     // 初始化页表
     init_vmm();
-
-    // 测试字符显示
-    console_clear();
-    console_write_color("Hello World!\n", rc_black, rc_white);
+    // 初始化内核堆
+    init_heap();
 
     // 显示内核虚拟地址
     printk("\nkernel in memory start: 0x%08X\n", kern_start);
@@ -84,19 +83,24 @@ void kern_init()
 
     // 显示可用内存
     show_memory_map();
-    printk_color(rc_black, rc_red, "\nFree Physical Memory: %u MB\n", phy_page_count * 4 / 1024);
+    printk_color(rc_black, rc_red, "\nfree physical memory: %u MB\n", phy_page_count * 4 / 1024);
 
-    // 测试内存管理
-    uint32_t allc_addr = NULL;
-    printk_color(rc_black, rc_light_brown, "\nTest Physical Memory Alloc :\n");
-    allc_addr = pmm_alloc_page();
-    printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
-    allc_addr = pmm_alloc_page();
-    printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
-    allc_addr = pmm_alloc_page();
-    printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
-    allc_addr = pmm_alloc_page();
-    printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n\n", allc_addr);
+    // 测试堆内存管理
+    printk_color(rc_black, rc_magenta, "\ntest kmalloc() && kfree() now ...\n\n");
+
+    void *addr2 = kmalloc(500);
+    printk("kmalloc   500 byte in 0x%X\n", addr2);
+    void *addr3 = kmalloc(5000);
+    printk("kmalloc  5000 byte in 0x%X\n", addr3);
+    void *addr4 = kmalloc(50000);
+    printk("kmalloc 50000 byte in 0x%X\n\n", addr4);
+
+    printk("free mem in 0x%X\n", addr2);
+    kfree(addr2);
+    printk("free mem in 0x%X\n", addr3);
+    kfree(addr3);
+    printk("free mem in 0x%X\n\n", addr4);
+    kfree(addr4);
 
     while (1) {
         asm volatile ("hlt");

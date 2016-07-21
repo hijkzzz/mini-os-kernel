@@ -8,7 +8,6 @@ isr%1:
     jmp isr_common_stub
 %endmacro
 
-
 %macro ISR_ERRCODE 1
 [GLOBAL isr%1]
 isr%1:
@@ -74,6 +73,7 @@ ISR_NOERRCODE 47     ; 15 IDE1 传输控制使用
 ; 系统调用
 ISR_NOERRCODE 255
 
+; 保存寄存器
 [EXTERN isr_handler]
 [GLOBAL isr_common_stub]
 isr_common_stub:
@@ -104,6 +104,7 @@ isr_common_stub:
     iret                ; EIP，CS，EFLAGS，ESP，SS 出栈
 .end
 
+; 加载中断描述符表
 [GLOBAL idt_flush]
 idt_flush:
     mov eax, [esp + 4]
