@@ -116,6 +116,8 @@ void kern_init()
     // 内核线程测试
     kernel_thread(kern_thread_test1, NULL);
     kernel_thread(kern_thread_test2, NULL);
+
+    // 开启中断
     enable_intr();
 
     while (1) {
@@ -133,7 +135,7 @@ int kern_thread_test1(void *arg)
 {
     while(1) {
         if (flag) {
-            printk(rc_black, rc_green, "A");
+            printk_color(rc_black, rc_green, "A");
             flag = 0;
         }
     }
@@ -144,7 +146,7 @@ int kern_thread_test2(void *arg)
 {
     while(1) {
         if (!flag) {
-            printk(rc_black, rc_blue, "B");
+            printk_color(rc_black, rc_blue, "B");
             flag = 1;
         }
     }

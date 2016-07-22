@@ -1,7 +1,7 @@
 [global switch_to]
 
 switch_to:
-    ; 取 prev 参数
+    ; 保存现场
     mov eax, [esp + 4]
 
     mov [eax + 0],  esp
@@ -14,6 +14,7 @@ switch_to:
     pop ecx
     mov [eax + 20], ecx
 
+    ; 加载新环境
     mov eax, [esp + 8]
 
     mov esp, [eax + 0]
