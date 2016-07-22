@@ -17,7 +17,8 @@ C_INCLUDE = libs/         \
 			kern/mm/     \
 			kern/trap/    \
 			kern/process  \
-			kern/syscall
+			kern/syscall  \
+			kern/schedule
 
 C_FLAGS += $(addprefix -I,$(C_INCLUDE))
 
@@ -56,11 +57,11 @@ umount_image:
 
 .PHONY:qemu
 qemu:
-	qemu -fda floppy.img -boot a
+	qemu -fda floppy.img -boot a -m 256
 
 .PHONY:debug
 debug:
-	qemu -S -s -fda floppy.img -boot a &
+	qemu -S -s -fda floppy.img -boot a -m 256 &
 	sleep 1
 	cgdb -x tools/gdbinit
 

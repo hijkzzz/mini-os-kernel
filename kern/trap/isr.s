@@ -1,6 +1,6 @@
-%macro ISR_NOERRCODE 1    ; 指定参数数量
+; 中断处理函数生成宏
+%macro ISR_NOERRCODE 1
 [GLOBAL isr%1]
-
 isr%1:
     cli
     push 0     ; 无效错误代码
@@ -111,3 +111,4 @@ idt_flush:
     lidt [eax]
     ret                 ; EIP 出栈
 .end
+

@@ -68,7 +68,7 @@ void kern_init()
     // 初始化中断描述符表、可编程中断控制器
     init_idt();
     // 初始化时钟中断
-    init_timer(10);
+    init_timer(100);
     // 初始化物理内存管理
     init_pmm();
     // 初始化页表
@@ -82,7 +82,6 @@ void kern_init()
     printk("kernel in memory used:   %d KB\n", (kern_end - kern_start) / 1024);
 
     // 显示可用内存
-    show_memory_map();
     printk_color(rc_black, rc_red, "\nfree physical memory: %u MB\n", phy_page_count * 4 / 1024);
 
     // 测试堆内存管理
@@ -101,6 +100,9 @@ void kern_init()
     kfree(addr3);
     printk("free mem in 0x%X\n\n", addr4);
     kfree(addr4);
+
+    // 开中断
+    asm volatile ("sti");
 
     while (1) {
         asm volatile ("hlt");
