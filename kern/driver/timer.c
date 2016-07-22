@@ -2,16 +2,12 @@
 #include "idt.h"
 #include "common.h"
 #include "debug.h"
+#include "sched.h"
 
+// 时间片轮转调度
 void timer_callback(pt_regs_t *regs)
 {
-    static uint32_t tick = 0;
-    if (tick == 100) {
-        printk_color(rc_black, rc_red, "Tick!\n");
-        tick = 0;
-    }
-    else
-        ++tick;
+    schedule();
 }
 
 void init_timer(uint32_t frequency)

@@ -17,6 +17,7 @@ typedef          short int16_t;
 typedef unsigned char  uint8_t;
 typedef          char  int8_t;
 typedef uint32_t       size_t;
+typedef uint32_t       pid_t;
 
 // 向下取整
 #define ROUNDDOWN(a, n) ({                                          \

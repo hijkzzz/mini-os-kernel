@@ -5,15 +5,27 @@
 #include "pmm.h"
 #include "vmm.h"
 #include "heap.h"
+#include "sched.h"
 
 // 内核初始化
 void kern_init();
+
+// 开中断
+void enable_intr();
+
+// 内核测试线程入口函数
+int kern_thread_test1(void *arg);
+int kern_thread_test2(void *arg);
+
+// 内核线程测试变量
+int flag = 1;
 
 // 开启分页后的 multiboot 结构体指针
 multiboot_t *glb_mboot_ptr;
 
 // 开启分页后的 内核栈
 char kern_stack[STACK_SIZE];
+uint32_t kern_stack_top;
 
 // 临时页表，使用 0 - 640 KB 空闲内存
 __attribute__((section(".init.data"))) pgd_t *pgd_tmp  = (pgd_t *)0x1000;
@@ -47,7 +59,7 @@ __attribute__((section(".init.text"))) void kern_entry()
     asm volatile ("mov %0, %%cr0" : : "r" (cr0));
 
     // 更新内核栈地址
-    uint32_t kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE) & 0xFFFFFFF0;
+    kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE) & 0xFFFFFFF0;
     asm volatile ("mov %0, %%esp\n\t"
             "xor %%ebp, %%ebp" : : "r" (kern_stack_top));
 
@@ -75,11 +87,11 @@ void kern_init()
     init_vmm();
     // 初始化内核堆
     init_heap();
+    // 初始化进程调度
+    init_sched();
 
-    // 显示内核虚拟地址
-    printk("\nkernel in memory start: 0x%08X\n", kern_start);
-    printk("kernel in memory end:   0x%08X\n", kern_end);
-    printk("kernel in memory used:   %d KB\n", (kern_end - kern_start) / 1024);
+    // 清除启动信息
+    console_clear();
 
     // 显示可用内存
     printk_color(rc_black, rc_red, "\nfree physical memory: %u MB\n", phy_page_count * 4 / 1024);
@@ -101,11 +113,41 @@ void kern_init()
     printk("free mem in 0x%X\n\n", addr4);
     kfree(addr4);
 
-    // 开中断
-    asm volatile ("sti");
+    // 内核线程测试
+    kernel_thread(kern_thread_test1, NULL);
+    kernel_thread(kern_thread_test2, NULL);
+    enable_intr();
 
     while (1) {
-        asm volatile ("hlt");
+        schedule();
     }
+}
+
+void enable_intr()
+{
+    // 开中断
+    asm volatile ("sti");
+}
+
+int kern_thread_test1(void *arg)
+{
+    while(1) {
+        if (flag) {
+            printk(rc_black, rc_green, "A");
+            flag = 0;
+        }
+    }
+    return 0;
+}
+
+int kern_thread_test2(void *arg)
+{
+    while(1) {
+        if (!flag) {
+            printk(rc_black, rc_blue, "B");
+            flag = 1;
+        }
+    }
+    return 0;
 }
 
