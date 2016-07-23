@@ -14,11 +14,12 @@ ASM_FLAGS = -f elf -g -F stabs
 C_INCLUDE = libs/         \
             kern/debug/   \
 			kern/driver/  \
-			kern/mm/     \
+			kern/mm/      \
 			kern/trap/    \
 			kern/process  \
-			kern/syscall  \
-			kern/schedule
+			kern/schedule \
+			kern/fs       \
+			kern/syscall
 
 C_FLAGS += $(addprefix -I,$(C_INCLUDE))
 
