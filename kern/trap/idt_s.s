@@ -70,10 +70,9 @@ ISR_NOERRCODE 45     ; 13 协处理器使用
 ISR_NOERRCODE 46     ; 14 IDE0 传输控制使用
 ISR_NOERRCODE 47     ; 15 IDE1 传输控制使用
 
-; 系统调用
-ISR_NOERRCODE 255
+ISR_NOERRCODE 255    ; 系统调用
 
-; 保存寄存器
+; 保存现场
 [EXTERN isr_handler]
 [GLOBAL isr_common_stub]
 isr_common_stub:

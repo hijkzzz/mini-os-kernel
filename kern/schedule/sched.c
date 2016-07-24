@@ -1,4 +1,5 @@
 #include "sched.h"
+#include "proc.h"
 #include "pmm.h"
 #include "heap.h"
 #include "debug.h"
@@ -10,11 +11,12 @@ proc_struct_t *current = NULL;
 // 初始化进程调度
 void init_sched()
 {
-    // 初始进程
+    // 初始化 idleproc 进程
     current = (proc_struct_t *)(kern_stack_top - STACK_SIZE);
     current->state = TASK_RUNNABLE;
     current->pid = now_pid++;
-    current->stack = NULL;
+    set_proc_name(current, "idleproc");
+    current->kstack = kern_stack;
     current->mm = NULL;
 
     // 双向循环链表

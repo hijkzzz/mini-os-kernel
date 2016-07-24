@@ -4,6 +4,10 @@
 #include "types.h"
 #include "vmm.h"
 
+#define PROC_NAME_LEN               15
+#define MAX_PROCESS                 4096
+#define MAX_PID                     (MAX_PROCESS * 2)
+
 // 进程状态
 typedef
 enum task_state {
@@ -32,14 +36,18 @@ struct mm_struct {
 // 进程控制块
 typedef
 struct proc_struct {
-    volatile task_state_t state;
-    pid_t pid;
-    void *stack;               // 栈地址
-    mm_struct_t *mm;
-    context_t context;
+    volatile task_state_t state;  // 运行状态
+    volatile bool need_resched;   // 进程需要被调度
+    context_t context;            // 上下文
+    void *kstack;                 // 内核栈
+    mm_struct_t *mm;              // 内存管理结构
+    uint32_t cr3;                 // 页目录
+    pid_t pid;                    // 进程号
+    char name[PROC_NAME_LEN + 1]; // 进程名
+    uint32_t flags;               // 进程标志
+    struct proc_struct *parent;   // 父进程
 
-    // 双向循环链表
-    struct proc_struct *prev;
+    struct proc_struct *prev;     // 双向循环链表
     struct proc_struct *next;
 } proc_struct_t;
 
@@ -51,5 +59,8 @@ int32_t kernel_thread(int (*fn)(void *), void *arg);
 
 // 内核线程退出
 void kthread_exit();
+
+// 设置进程名
+char *set_proc_name(struct proc_struct *proc, const char *name);
 
 #endif // INCLUDE_PROC_H

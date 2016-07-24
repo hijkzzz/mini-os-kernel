@@ -17,6 +17,8 @@ extern uint8_t kern_end[];
 // 动态分配物理页面数
 extern uint32_t phy_page_count;
 
+// 内核栈
+extern char kern_stack[];
 extern uint32_t kern_stack_top;
 
 // 初始化内存管理

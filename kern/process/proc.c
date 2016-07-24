@@ -18,7 +18,8 @@ int32_t kernel_thread(int (*fn)(void *), void *arg)
     // 内核线程共享内核页表
     new_proc->state = TASK_RUNNABLE;
     new_proc->pid   = now_pid++;
-    new_proc->stack = NULL;
+    set_proc_name(new_proc, "");
+    new_proc->kstack = kern_stack;
     new_proc->mm    = NULL;
 
     // 填写函数调用栈
@@ -45,3 +46,10 @@ void kthread_exit()
     register uint32_t val asm("eax");
     printk("Thread exited with value %d", val);
 }
+
+char *
+set_proc_name(struct proc_struct *proc, const char *name) {
+    bzero(proc->name, sizeof(proc->name));
+    return strcpy(proc->name, name);
+}
+
