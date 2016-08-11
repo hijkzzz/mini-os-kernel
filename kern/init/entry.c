@@ -1,3 +1,4 @@
+#include "common.h"
 #include "debug.h"
 #include "gdt.h"
 #include "idt.h"
@@ -9,16 +10,6 @@
 
 // 内核初始化
 void kern_init();
-
-// 开中断
-void enable_intr();
-
-// 内核测试线程入口函数
-int kern_thread_test1(void *arg);
-int kern_thread_test2(void *arg);
-
-// 内核线程测试变量
-int flag = 1;
 
 // 开启分页后的 multiboot 结构体指针
 multiboot_t *glb_mboot_ptr;
@@ -75,6 +66,7 @@ void kern_init()
 {
     // 初始化字符显示
     init_debug();
+    console_clear();
     // 初始化全局描述符表
     init_gdt();
     // 初始化中断描述符表、可编程中断控制器
@@ -89,9 +81,6 @@ void kern_init()
     init_heap();
     // 初始化进程调度
     init_sched();
-
-    // 清除启动信息
-    console_clear();
 
     // 显示可用内存
     printk_color(rc_black, rc_red, "\nfree physical memory: %u MB\n", phy_page_count * 4 / 1024);
@@ -113,43 +102,11 @@ void kern_init()
     printk("free mem in 0x%X\n\n", addr4);
     kfree(addr4);
 
-    // 内核线程测试
-    kernel_thread(kern_thread_test1, NULL);
-    kernel_thread(kern_thread_test2, NULL);
-
     // 开启中断
-    enable_intr();
+    sti();
 
     while (1) {
         schedule();
     }
-}
-
-void enable_intr()
-{
-    // 开中断
-    asm volatile ("sti");
-}
-
-int kern_thread_test1(void *arg)
-{
-    while(1) {
-        if (flag) {
-            printk_color(rc_black, rc_green, "A");
-            flag = 0;
-        }
-    }
-    return 0;
-}
-
-int kern_thread_test2(void *arg)
-{
-    while(1) {
-        if (!flag) {
-            printk_color(rc_black, rc_blue, "B");
-            flag = 1;
-        }
-    }
-    return 0;
 }
 

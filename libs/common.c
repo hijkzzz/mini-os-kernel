@@ -18,3 +18,25 @@ inline uint16_t inw(uint16_t port)
     asm volatile("inw %1, %0" : "=a"(ret) : "dN"(port));
     return ret;
 }
+
+inline void sti(void)
+{
+    asm volatile ("sti");
+}
+
+inline void cli(void)
+{
+    asm volatile ("cli" ::: "memory");
+}
+
+inline uint32_t read_eflags(void)
+{
+    uint32_t eflags;
+    asm volatile ("pushfl; popl %0" : "=r" (eflags));
+    return eflags;
+}
+
+inline void write_eflags(uint32_t eflags)
+{
+    asm volatile ("pushl %0; popfl" :: "r" (eflags));
+}

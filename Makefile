@@ -7,12 +7,12 @@ CC = gcc
 LD = ld
 ASM = nasm
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector 
+C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector
 LD_FLAGS = -T tools/kernel.ld -m elf_i386 -nostdlib
 ASM_FLAGS = -f elf -g -F stabs
 
 C_INCLUDE = libs/         \
-            kern/debug/   \
+			kern/debug/   \
 			kern/driver/  \
 			kern/mm/      \
 			kern/trap/    \
@@ -26,15 +26,15 @@ C_FLAGS += $(addprefix -I,$(C_INCLUDE))
 all: $(S_OBJECTS) $(C_OBJECTS) link update_image
 
 .c.o:
-	@echo gcc $< ...
+	@echo gcc $<
 	$(CC) $(C_FLAGS) $< -o $@
 
 .s.o:
-	@echo nasm $< ...
+	@echo nasm $<
 	$(ASM) $(ASM_FLAGS) $<
 
 link:
-	@echo ld ...
+	@echo ld
 	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o mini_kernel
 
 .PHONY:clean
@@ -43,18 +43,18 @@ clean:
 
 .PHONY:update_image
 update_image:
-	sudo mount floppy.img /mnt/kernel
-	sudo cp mini_kernel /mnt/kernel
+	sudo mount floppy.img /mnt/floppy
+	sudo cp mini_kernel /mnt/floppy
 	sleep 1
-	sudo umount /mnt/kernel
+	sudo umount /mnt/floppy
 
 .PHONY:mount_image
 mount_image:
-	sudo mount floppy.img /mnt/kernel
+	sudo mount floppy.img /mnt/floppy
 
 .PHONY:umount_image
 umount_image:
-	sudo umount /mnt/kernel
+	sudo umount /mnt/floppy
 
 .PHONY:qemu
 qemu:
