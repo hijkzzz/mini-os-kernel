@@ -1,2 +1,9 @@
-#mini OS
-基于 JamesM’s kernel development tutorials 写的操作系统
+#自制操作系统
+参考《一个操作系统的实现》
+
+#待完成功能
+TTY
+进程间通信
+文件系统
+系统调用
+安装应用程序

@@ -10,12 +10,12 @@ uint8_t inb(uint16_t port);
 // 输入字
 uint16_t inw(uint16_t port);
 // 开中断
-inline void sti(void);
+void sti(void);
 // 关中断
-inline void cli(void);
+void cli(void);
 // 读 eflags
-inline uint32_t read_eflags(void);
+uint32_t read_eflags(void);
 // 写 eflags
-inline void write_eflags(uint32_t eflags);
+void write_eflags(uint32_t eflags);
 
 #endif // INCLUDE_COMMON_H

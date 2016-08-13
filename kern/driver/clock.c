@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "clock.h"
 #include "idt.h"
 #include "common.h"
 #include "debug.h"

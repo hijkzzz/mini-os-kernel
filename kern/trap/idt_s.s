@@ -72,7 +72,7 @@ ISR_NOERRCODE 47     ; 15 IDE1 传输控制使用
 
 ISR_NOERRCODE 255    ; 系统调用
 
-; 保存现场
+; 保存，恢复现场
 [EXTERN isr_handler]
 [GLOBAL isr_common_stub]
 isr_common_stub:
@@ -111,3 +111,63 @@ idt_flush:
     ret                 ; EIP 出栈
 .end
 
+
+; 8259 端口号
+INT_M_CTL	equ	0x20	; I/O port for interrupt controller         <Master>
+INT_M_CTLMASK	equ	0x21	; setting bits in this port disables ints   <Master>
+INT_S_CTL	equ	0xA0	; I/O port for second interrupt controller  <Slave>
+INT_S_CTLMASK	equ	0xA1	; setting bits in this port disables ints   <Slave>
+
+; 关中断
+disable_irq:
+	mov	ecx, [esp + 4]		; irq
+	pushf
+	cli
+	mov	ah, 1
+	rol	ah, cl			; ah = (1 << (irq % 8))
+	cmp	cl, 8
+	jae	disable_8		; disable irq >= 8 at the slave 8259
+disable_0:
+	in	al, INT_M_CTLMASK
+	test	al, ah
+	jnz	dis_already		; already disabled?
+	or	al, ah
+	out	INT_M_CTLMASK, al	; set bit at master 8259
+	popf
+	mov	eax, 1			; disabled by this function
+	ret
+disable_8:
+	in	al, INT_S_CTLMASK
+	test	al, ah
+	jnz	dis_already		; already disabled?
+	or	al, ah
+	out	INT_S_CTLMASK, al	; set bit at slave 8259
+	popf
+	mov	eax, 1			; disabled by this function
+	ret
+dis_already:
+	popf
+	xor	eax, eax		; already disabled
+	ret
+
+; 开中断
+enable_irq:
+	mov	ecx, [esp + 4]		; irq
+	pushf
+	cli
+	mov	ah, ~1
+	rol	ah, cl			; ah = ~(1 << (irq % 8))
+	cmp	cl, 8
+	jae	enable_8		; enable irq >= 8 at the slave 8259
+enable_0:
+	in	al, INT_M_CTLMASK
+	and	al, ah
+	out	INT_M_CTLMASK, al	; clear bit at master 8259
+	popf
+	ret
+enable_8:
+	in	al, INT_S_CTLMASK
+	and	al, ah
+	out	INT_S_CTLMASK, al	; clear bit at slave 8259
+	popf
+	ret

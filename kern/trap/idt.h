@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-void init_idt();
-
 typedef
 struct idt_entry_t {
     uint16_t base_low;
@@ -40,6 +38,8 @@ struct pt_regs_t {
     uint32_t ss;
 } pt_regs_t;
 
+// 中断初始化
+void init_idt();
 
 // 中断处理函数指针
 typedef void (*interrupt_handler_t)(pt_regs_t *);
@@ -49,6 +49,12 @@ void register_interrupt_handler(uint8_t n, interrupt_handler_t h);
 
 // 调用中断处理
 void isr_handler(pt_regs_t *regs);
+
+// 开启指定中断
+void enable_irq(int32_t irq);
+
+// 关闭指定中断
+void disable_irq(int32_t irq);
 
 // 声明中断处理函数
 // 0-19 属于 CPU 的异常中断

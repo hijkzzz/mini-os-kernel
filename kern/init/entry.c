@@ -2,11 +2,13 @@
 #include "debug.h"
 #include "gdt.h"
 #include "idt.h"
-#include "timer.h"
+#include "clock.h"
 #include "pmm.h"
 #include "vmm.h"
 #include "heap.h"
 #include "sched.h"
+#include "keyboard.h"
+#include "tty.h"
 
 // 内核初始化
 void kern_init();
@@ -81,6 +83,8 @@ void kern_init()
     init_heap();
     // 初始化进程调度
     init_sched();
+    // 初始化键盘
+    init_keyboard();
 
     // 显示可用内存
     printk_color(rc_black, rc_red, "\nfree physical memory: %u MB\n", phy_page_count * 4 / 1024);
@@ -105,8 +109,7 @@ void kern_init()
     // 开启中断
     sti();
 
-    while (1) {
-        schedule();
-    }
+    // 进入 TTY
+    task_tty();
 }
 
