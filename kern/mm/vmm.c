@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "pmm.h"
 #include "string.h"
+#include "heap.h"
 
 // 内核页目录区域，对齐到 4KB
 pgd_t pgd_kern[PGD_SIZE] __attribute__ ((aligned(PAGE_SIZE)));
@@ -153,3 +154,62 @@ uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa)
     return 0;
 }
 
+// 克隆页目录，返回页目录地址
+uint32_t clone_pgd(pgd_t *src)
+{
+    // 加上内核偏移地址
+    src = (pgd_t *)((uint32_t)src + PAGE_OFFSET);
+
+    // 分配空间
+    uint32_t phys = pmm_alloc_page();
+    pgd_t *dir = (pte_t *)(phys + PAGE_OFFSET);
+    bzero(dir, PAGE_SIZE);
+
+    for (int i = 0; i < PGD_SIZE; ++i) {
+        if (!src[i]) continue;
+
+        // 如果是内核区域
+        if (src[i] == pgd_kern[i])
+            dir[i] = pgd_kern[i];
+        else {
+            uint32_t phys = clone_pte(
+                    (page_helper_t *)ROUNDDOWN(src[i], PAGE_SIZE));
+            dir[i] = (phys | PAGE_PRESENT | PAGE_USER | PAGE_WRITE);
+        }
+    }
+
+    return phys;
+}
+
+// 克隆页表，返回页表地址
+uint32_t clone_pte(page_helper_t *src)
+{
+    src = (page_helper_t *)((uint32_t)src + PAGE_OFFSET);
+
+    uint32_t phys = pmm_alloc_page();
+    page_helper_t *table = (page_helper_t *)(phys + PAGE_OFFSET);
+    bzero(table, PAGE_SIZE);
+
+    int i;
+    for (i = 0; i < PTE_SIZE; ++i) {
+        if (!src[i].present) continue;
+        // 页帧内存
+        uint32_t phys2 = pmm_alloc_page();
+        // 填入物理地址
+        table[i].frame = (phys2 >> 12);
+
+        if (src[i].present) table[i].present = 1;
+        if (src[i].rw)      table[i].rw = 1;
+        if (src[i].user)    table[i].user = 1;
+        if (src[i].accessed)table[i].accessed = 1;
+        if (src[i].dirty)   table[i].dirty = 1;
+
+        copy_page_physical((src[i].frame << 12), (table[i].frame << 12));
+    }
+    return phys;
+}
+
+void copy_page_physical(uint32_t src, uint32_t dst)
+{
+    memcpy((uint8_t *)(dst + PAGE_OFFSET), (uint8_t *)(src + PAGE_OFFSET), PAGE_SIZE);
+}

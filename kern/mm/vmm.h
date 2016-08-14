@@ -28,6 +28,17 @@
 typedef uint32_t pgd_t;
 typedef uint32_t pte_t;
 
+typedef struct page_helper
+{
+    uint32_t present    : 1;   // Page present in memory
+    uint32_t rw         : 1;   // Read-only if clear, readwrite if set
+    uint32_t user       : 1;   // Supervisor level only if clear
+    uint32_t accessed   : 1;   // Has the page been accessed since last refresh?
+    uint32_t dirty      : 1;   // Has the page been written to since last refresh?
+    uint32_t unused     : 7;   // Amalgamation of unused and reserved bits
+    uint32_t frame      : 20;  // Frame address (shifted right 12 bits)
+} page_helper_t;
+
 // 页表成员数
 #define PGD_SIZE (PAGE_SIZE / sizeof(pgd_t))
 #define PTE_SIZE (PAGE_SIZE / sizeof(pte_t))
@@ -50,9 +61,19 @@ void map(pgd_t *pgd_now, uint32_t va, uint32_t pa, uint32_t flags);
 // 取消映射
 void unmap(pgd_t *pgd_now, uint32_t va);
 
+// 获取映射的物理地址
 uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa);
 
 // 缺页异常处理
 void page_fault(pt_regs_t *regs);
+
+// 克隆页目录，返回页目录地址
+uint32_t clone_pgd(pgd_t *src);
+
+// 克隆页表，返回页表地址
+uint32_t clone_pte(page_helper_t *src);
+
+// 复制物理页
+void copy_page_physical(uint32_t src, uint32_t dst);
 
 #endif  // INCLUDE_VMM_H
