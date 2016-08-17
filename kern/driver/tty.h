@@ -2,7 +2,7 @@
 #define INCLUDE_TTY_H
 
 // tty 进程
-void task_tty();
+int task_tty(void *args);
 // 打印字符
 void in_process(uint32_t key);
 

@@ -1,11 +1,12 @@
 #include "types.h"
 #include "keyboard.h"
 
-void task_tty()
+int task_tty(void *args)
 {
     while (1) {
         keyboard_read();
     }
+    return 0;
 }
 
 void in_process(uint32_t key)

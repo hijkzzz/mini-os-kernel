@@ -17,5 +17,9 @@ void cli(void);
 uint32_t read_eflags(void);
 // 写 eflags
 void write_eflags(uint32_t eflags);
+// 刷新页表
+void invlpg(void *addr);
+// load cr3
+void lcr3(uint32_t cr3);
 
 #endif // INCLUDE_COMMON_H

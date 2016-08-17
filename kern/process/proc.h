@@ -27,20 +27,13 @@ struct context {
     uint32_t eflags;
 } context_t;
 
-// 进程内存
-typedef
-struct mm_struct {
-     pgd_t *pgd_dir;
-} mm_struct_t;
-
 // 进程控制块
 typedef
 struct proc_struct {
     volatile task_state_t state;  // 运行状态
     volatile bool need_resched;   // 进程需要被调度
     context_t context;            // 上下文
-    void *kstack;                 // 内核栈
-    mm_struct_t *mm;              // 内存管理结构
+    uint32_t kstack;              // 内核栈
     uint32_t cr3;                 // 页目录
     pid_t pid;                    // 进程号
     char name[PROC_NAME_LEN + 1]; // 进程名

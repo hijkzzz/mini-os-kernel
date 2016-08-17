@@ -40,3 +40,15 @@ inline void write_eflags(uint32_t eflags)
 {
     asm volatile ("pushl %0; popfl" :: "r" (eflags));
 }
+
+inline void
+invlpg(void *addr) {
+    asm volatile ("invlpg (%0)" :: "r" (addr) : "memory");
+}
+
+inline void
+lcr3(uint32_t cr3) {
+    asm volatile ("mov %0, %%cr3" :: "r" (cr3) : "memory");
+}
+
+

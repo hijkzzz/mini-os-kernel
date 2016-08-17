@@ -10,6 +10,7 @@ extern uint8_t kern_start[];
 extern uint8_t kern_end[];
 
 #define STACK_SIZE    8192
+#define KERN_STACK_SIZE 2048      // 内核栈大小
 #define PMM_MAX_SIZE  0x20000000  // 可用内存 512MB
 #define PMM_PAGE_SIZE 0x1000      // 页面大小 4KB
 #define PAGE_MAX_SIZE (PMM_MAX_SIZE / PMM_PAGE_SIZE)

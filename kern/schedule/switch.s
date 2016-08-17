@@ -3,7 +3,7 @@
 switch_to:
     ; 保存现场
     mov eax, [esp + 4]
-
+    
     mov [eax + 0],  esp
     mov [eax + 4],  ebp
     mov [eax + 8],  ebx
@@ -27,3 +27,8 @@ switch_to:
     popf
 
     ret
+
+[global read_eip]
+read_eip:
+  pop eax
+  jmp eax

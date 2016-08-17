@@ -20,4 +20,7 @@ void change_task_to(proc_struct_t *next);
 // 切换上下文
 void switch_to(context_t *prev, context_t *next);
 
+// read eip
+uint32_t read_eip();
+
 #endif // INCLUDE_SCHEDULE_H

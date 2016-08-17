@@ -106,10 +106,14 @@ void kern_init()
     printk("free mem in 0x%X\n\n", addr4);
     kfree(addr4);
 
-    // 开启中断
-    sti();
+    // 初始化 TTY 进程
+    kernel_thread(task_tty, NULL);
 
-    // 进入 TTY
-    task_tty();
+    // 开启中断
+    //sti();
+
+    while (1) {
+        schedule();
+    }
 }
 

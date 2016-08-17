@@ -1,4 +1,5 @@
 #include "sched.h"
+#include "common.h"
 #include "proc.h"
 #include "pmm.h"
 #include "heap.h"
@@ -16,8 +17,8 @@ void init_sched()
     current->state = TASK_RUNNABLE;
     current->pid = now_pid++;
     set_proc_name(current, "idleproc");
-    current->kstack = kern_stack;
-    current->mm = NULL;
+    current->cr3 = (uint32_t)pgd_kern - PAGE_OFFSET;
+    current->kstack = (uint32_t)kern_stack + STACK_SIZE;
 
     // 双向循环链表
     current->next = current;
@@ -39,6 +40,8 @@ void change_task_to(proc_struct_t *next)
     if (current != next) {
         proc_struct_t *prev = current;
         current = next;
+        switch_pgd(next->cr3);
+        // 切换堆栈
         switch_to(&(prev->context), &(current->context));
     }
 }
