@@ -1,5 +1,6 @@
 #include "types.h"
 #include "keyboard.h"
+#include "debug.h"
 
 int task_tty(void *args)
 {

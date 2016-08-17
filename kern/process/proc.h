@@ -62,4 +62,7 @@ int32_t fork();
 // 获取进程 id
 int32_t getpid();
 
+// 切换到用户态
+void switch_to_user_mode();
+
 #endif // INCLUDE_PROC_H

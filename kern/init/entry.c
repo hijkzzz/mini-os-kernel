@@ -110,7 +110,7 @@ void kern_init()
     kernel_thread(task_tty, NULL);
 
     // 开启中断
-    //sti();
+    sti();
 
     while (1) {
         schedule();
