@@ -40,8 +40,9 @@ void change_task_to(proc_struct_t *next)
     if (current != next) {
         proc_struct_t *prev = current;
         current = next;
+        // 切换内核堆和页表
+        set_kernel_stack(next->kstack);
         switch_pgd(next->cr3);
-        // 切换堆栈
         switch_to(&(prev->context), &(current->context));
     }
 }
