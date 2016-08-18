@@ -109,8 +109,8 @@ void isr43();        // 11 建议 AGP 显卡使用
 void isr44();        // 12 接 PS/2 鼠标，也可设定给其他硬件
 void isr45();        // 13 协处理器使用
 void isr46();        // 14 IDE0 传输控制使用
-void isr47();        // 15 IDE1 传输控制使用
+void isr47();        // 15 IDE1 传控制使用
 
-void isr255();       // 系统调用
+void isr80();       // 系统调用
 
 #endif // INCLUDE_IDT_H

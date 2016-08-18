@@ -7,11 +7,15 @@
 #include "vmm.h"
 #include "heap.h"
 #include "sched.h"
+#include "syscall.h"
 #include "keyboard.h"
 #include "tty.h"
 
 // 内核初始化
 void kern_init();
+
+// 测试函数
+int user_mode_test(void * args);
 
 // 开启分页后的 multiboot 结构体指针
 multiboot_t *glb_mboot_ptr;
@@ -83,6 +87,8 @@ void kern_init()
     init_heap();
     // 初始化进程调度
     init_sched();
+    // 初始化系统调用
+    init_syscall();
     // 初始化键盘
     init_keyboard();
 
@@ -108,6 +114,8 @@ void kern_init()
 
     // 初始化 TTY 进程
     kernel_thread(task_tty, NULL);
+    // 用户模式测试
+    kernel_thread(user_mode_test, NULL);
 
     // 开启中断
     sti();
@@ -115,5 +123,13 @@ void kern_init()
     while (1) {
         schedule();
     }
+}
+
+int user_mode_test(void *args)
+{
+    switch_to_user_mode();
+    while(1)
+        syscall_console_write("A");
+    return 0;
 }
 

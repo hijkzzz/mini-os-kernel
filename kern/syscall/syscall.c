@@ -1,36 +1,28 @@
-// syscall.c -- Defines the implementation of a system call system.
-//              Written for JamesM's kernel development tutorials.
-
 #include "syscall.h"
 #include "idt.h"
-
 #include "debug.h"
+#define SYSCALLS_NUM 1
 
-static void syscall_handler(registers_t *regs);
+static void syscall_handler(pt_regs_t *regs);
 
-DEFN_SYSCALL1(monitor_write, 0, const char*);
-DEFN_SYSCALL1(monitor_write_hex, 1, const char*);
-DEFN_SYSCALL1(monitor_write_dec, 2, const char*);
+DEFN_SYSCALL1(console_write, 0, const char*);
 
-static void *syscalls[3] =
+static void *syscalls[SYSCALLS_NUM] =
 {
-    &monitor_write,
-    &monitor_write_hex,
-    &monitor_write_dec,
+    &console_write,
 };
-u32int num_syscalls = 3;
 
-void initialise_syscalls()
+void init_syscall()
 {
     // Register our syscall handler.
     register_interrupt_handler (0x80, &syscall_handler);
 }
 
-void syscall_handler(registers_t *regs)
+void syscall_handler(pt_regs_t *regs)
 {
     // Firstly, check if the requested syscall number is valid.
     // The syscall number is found in EAX.
-    if (regs->eax >= num_syscalls)
+    if (regs->eax >= SYSCALLS_NUM)
         return;
 
     // Get the required syscall location.

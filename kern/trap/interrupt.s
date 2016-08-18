@@ -70,11 +70,11 @@ ISR_NOERRCODE 45     ; 13 协处理器使用
 ISR_NOERRCODE 46     ; 14 IDE0 传输控制使用
 ISR_NOERRCODE 47     ; 15 IDE1 传输控制使用
 
-ISR_NOERRCODE 255    ; 系统调用
+ISR_NOERRCODE 80    ; 系统调用
 
 ; 保存，恢复现场
 [EXTERN isr_handler]
-[GLOBAL isr_common_stub]
+[GLOBAL isr_common_stub]c
 isr_common_stub:
     pusha               ; 保存通用寄存器
     mov ax, ds
@@ -112,9 +112,9 @@ idt_flush:
 .end
 
 
-; 8259 端口号
+; 8259 端口号c
 INT_M_CTL	equ	0x20	; I/O port for interrupt controller         <Master>
-INT_M_CTLMASK	equ	0x21	; setting bits in this port disables ints   <Master>
+INT_M_CTLMASK	equ	0x21	; setcting bits in this port disables ints   <Master>
 INT_S_CTL	equ	0xA0	; I/O port for second interrupt controller  <Slave>
 INT_S_CTLMASK	equ	0xA1	; setting bits in this port disables ints   <Slave>
 

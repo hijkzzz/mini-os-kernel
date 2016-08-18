@@ -1,4 +1,5 @@
 #include "gdt.h"
+#include "string.h"
 
 #define GDT_LENGTH 6
 

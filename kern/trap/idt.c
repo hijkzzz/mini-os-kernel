@@ -15,7 +15,6 @@ static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags
 
 static void init_8259a();
 
-// 定义在 idt_s.s 中的 idt 加载函数
 extern void idt_flush(uint32_t);
 
 void init_idt()
@@ -81,9 +80,8 @@ void init_idt()
     idt_set_gate(46, (uint32_t)isr46, 0x08, 0x8E);
     idt_set_gate(47, (uint32_t)isr47, 0x08, 0x8E);
 
-
-    // 255 用于实现系统调用
-    idt_set_gate(255, (uint32_t)isr255, 0x08, 0x8E);
+    // 80 用于实现系统调用
+    idt_set_gate(80, (uint32_t)isr80, 0x08, 0x8E);
 
     idt_ptr.base = (uint32_t)&idt_entries;
     idt_ptr.limit = sizeof(idt_entries) - 1;
