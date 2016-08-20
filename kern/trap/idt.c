@@ -81,7 +81,7 @@ void init_idt()
     idt_set_gate(47, (uint32_t)isr47, 0x08, 0x8E);
 
     // 80 用于实现系统调用
-    idt_set_gate(80, (uint32_t)isr80, 0x08, 0x8E);
+    idt_set_gate(80, (uint32_t)isr80, 0x08, 0xEE);
 
     idt_ptr.base = (uint32_t)&idt_entries;
     idt_ptr.limit = sizeof(idt_entries) - 1;

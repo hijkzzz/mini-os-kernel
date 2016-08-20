@@ -4,6 +4,7 @@
 #include "pmm.h"
 #include "heap.h"
 #include "debug.h"
+#include "gdt.h"
 
 proc_struct_t *running_proc_head = NULL;
 proc_struct_t *wait_proc_head = NULL;

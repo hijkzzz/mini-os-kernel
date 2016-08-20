@@ -1,6 +1,7 @@
 #include "syscall.h"
 #include "idt.h"
 #include "debug.h"
+
 #define SYSCALLS_NUM 1
 
 static void syscall_handler(pt_regs_t *regs);

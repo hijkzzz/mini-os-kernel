@@ -2,6 +2,7 @@
 #include "sched.h"
 #include "pmm.h"
 #include "vmm.h"
+#include "gdt.h"
 #include "heap.h"
 #include "debug.h"
 #include "string.h"

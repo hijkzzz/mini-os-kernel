@@ -14,9 +14,6 @@
 // 内核初始化
 void kern_init();
 
-// 测试函数
-int user_mode_test(void * args);
-
 // 开启分页后的 multiboot 结构体指针
 multiboot_t *glb_mboot_ptr;
 
@@ -113,23 +110,11 @@ void kern_init()
     kfree(addr4);
 
     // 初始化 TTY 进程
-    kernel_thread(task_tty, NULL);
-    // 用户模式测试
-    kernel_thread(user_mode_test, NULL);
+    //kernel_thread(task_tty, NULL);
 
     // 开启中断
-    sti();
+    //sti();
 
-    while (1) {
-        schedule();
-    }
-}
-
-int user_mode_test(void *args)
-{
     switch_to_user_mode();
-    while(1)
-        syscall_console_write("A");
-    return 0;
+    //syscall_console_write("SYSCALL");
 }
-
