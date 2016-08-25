@@ -2,7 +2,7 @@
 *.o
 
 # 忽略内核文件
-mini_kernel
+kernel
 
 # 忽略 tags
 tags

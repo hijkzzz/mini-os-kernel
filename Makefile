@@ -35,16 +35,16 @@ all: $(S_OBJECTS) $(C_OBJECTS) link update_image
 
 link:
 	@echo ld
-	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o mini_kernel
+	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o kernel
 
 .PHONY:clean
 clean:
-	$(RM) $(S_OBJECTS) $(C_OBJECTS) mini_kernel
+	$(RM) $(S_OBJECTS) $(C_OBJECTS) kernel
 
 .PHONY:update_image
 update_image:
 	sudo mount floppy.img /mnt/floppy
-	sudo cp mini_kernel /mnt/floppy
+	sudo cp kernel /mnt/floppy
 	sleep 1
 	sudo umount /mnt/floppy
 
