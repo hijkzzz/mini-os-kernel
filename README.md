@@ -23,13 +23,14 @@ make qemu
 * ~~虚拟内存管理~~
 * ~~内核进程~~
 * ~~任务调度~~
-* 用户进程
 * 系统调用
-* 终端
 * 进程间通信
 * 文件系统
 * 运行应用程序
+* 网络支持
 
 ##参考资料
+* Tsinghua uCore Labs
+* MIT 6.828
 * JamesM's kernel development tutorials
 * 一个操作系统的实现
