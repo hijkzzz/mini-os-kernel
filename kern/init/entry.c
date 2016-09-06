@@ -110,11 +110,11 @@ void kern_init()
     kfree(addr4);
 
     // 初始化 TTY 进程
-    //kernel_thread(task_tty, NULL);
+    kernel_thread(task_tty, NULL);
 
     // 开启中断
-    //sti();
-
-    switch_to_user_mode();
-    //syscall_console_write("SYSCALL");
+    sti();
+    while(1) {
+        schedule();
+    }
 }
