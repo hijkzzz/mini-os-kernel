@@ -34,7 +34,7 @@ inline int strcmp(const char *str1, const char *str2)
 inline char *strcpy(char *dest, const char *src)
 {
     char *p = dest;
-    while ((*p++ == *src++) != '\0');
+    while ((*p++ = *src++) != '\0');
     return dest;
 }
 
