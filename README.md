@@ -1,5 +1,4 @@
 ## 自制操作系统
-
 自制一个简单的类 UNIX 内核
 
 ## 编译&运行
@@ -13,8 +12,7 @@ make
 make qemu
 ```
 
-## 完成进度
-
+## TODO
 * ~~启动~~
 * ~~字符打印~~
 * ~~中断服务~~
@@ -28,10 +26,3 @@ make qemu
 * 文件系统
 * 运行应用程序
 * 网络支持
-
-## 参考资料
-
-* Tsinghua uCore Labs
-* MIT 6.828
-* JamesM's kernel development tutorials
-* 一个操作系统的实现
