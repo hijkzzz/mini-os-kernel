@@ -12,7 +12,7 @@ make
 make qemu
 ```
 
-## TODO
+## ToDo
 - [x] 启动
 - [x] 字符打印
 - [x] 中断服务
