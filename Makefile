@@ -18,8 +18,6 @@ C_INCLUDE = libs/         \
 			kern/trap/    \
 			kern/process  \
 			kern/schedule \
-			kern/fs       \
-			kern/syscall
 
 C_FLAGS += $(addprefix -I,$(C_INCLUDE))
 

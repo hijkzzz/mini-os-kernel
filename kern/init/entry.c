@@ -7,7 +7,6 @@
 #include "vmm.h"
 #include "heap.h"
 #include "sched.h"
-#include "syscall.h"
 #include "keyboard.h"
 #include "tty.h"
 
@@ -84,8 +83,6 @@ void kern_init()
     init_heap();
     // 初始化进程调度
     init_sched();
-    // 初始化系统调用
-    init_syscall();
     // 初始化键盘
     init_keyboard();
 
