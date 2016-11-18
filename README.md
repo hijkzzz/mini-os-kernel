@@ -1,4 +1,6 @@
-# black-os 
+# black-os
+![Build Status](https://img.shields.io/teamcity/codebetter/bt428.svg)
+
 Mini Operating System Kernel
 
 ## Modules 
