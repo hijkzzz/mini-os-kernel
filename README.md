@@ -34,3 +34,4 @@ make qemu
 
 ## Screenshots
 ![](https://raw.githubusercontent.com/hijkzzz/black-os/master/screenshots/test1.jpg)
+![](https://raw.githubusercontent.com/hijkzzz/black-os/master/screenshots/test2.jpg)
