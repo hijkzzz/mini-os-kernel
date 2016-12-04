@@ -56,9 +56,6 @@ void kthread_exit();
 // 设置进程名
 char *set_proc_name(struct proc_struct *proc, const char *name);
 
-// 复制进程
-int32_t fork();
-
 // 获取进程 id
 int32_t getpid();
 

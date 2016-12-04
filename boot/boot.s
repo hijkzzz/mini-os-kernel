@@ -40,4 +40,3 @@ STACK_TOP equ $ - stack - 1     ; 临时内核栈栈顶
 
 tmp_mboot_ptr:
     dd 0
-

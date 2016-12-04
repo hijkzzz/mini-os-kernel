@@ -67,13 +67,4 @@ uint32_t get_mapping(pgd_t *pgd_now, uint32_t va, uint32_t *pa);
 // 缺页异常处理
 void page_fault(pt_regs_t *regs);
 
-// 克隆页目录，返回页目录地址
-uint32_t clone_pgd(pgd_t *src);
-
-// 克隆页表，返回页表地址
-uint32_t clone_pte(page_helper_t *src);
-
-// 复制物理页
-void copy_page_physical(uint32_t src, uint32_t dst);
-
 #endif  // INCLUDE_VMM_H
