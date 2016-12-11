@@ -1,7 +1,7 @@
 C_SOURCES = $(shell find . -name "*.c")
 C_OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
-S_SOURCES = $(shell find . -name "*.s")
-S_OBJECTS = $(patsubst %.s, %.o, $(S_SOURCES))
+S_SOURCES = $(shell find . -name "*.S")
+S_OBJECTS = $(patsubst %.S, %.o, $(S_SOURCES))
 
 CC = gcc
 LD = ld
@@ -27,7 +27,7 @@ all: $(S_OBJECTS) $(C_OBJECTS) link update_image
 	@echo gcc $<
 	$(CC) $(C_FLAGS) $< -o $@
 
-.s.o:
+.S.o:
 	@echo nasm $<
 	$(ASM) $(ASM_FLAGS) $<
 
