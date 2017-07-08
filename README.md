@@ -31,3 +31,6 @@ make
 ```
 make qemu
 ```
+
+## Screenshot
+![](https://github.com/hijkzzz/os-9527/blob/master/test.jpg?raw=true)
