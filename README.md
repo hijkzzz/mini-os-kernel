@@ -34,3 +34,7 @@ make qemu
 
 ## Screenshot
 ![](https://github.com/hijkzzz/os-9527/blob/master/test.jpg?raw=true)
+
+## References
+- JamesM's kernel development tutorials
+- uCore OS
